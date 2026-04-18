@@ -51,7 +51,7 @@ func New() *cobra.Command {
 	rootCmd.Flags().BoolVarP(&opts.IncludeStderr, "include-stderr", "e", true, "Include stderr in the diff comparison")
 	rootCmd.Flags().StringVarP(&colorOpt, "color", "C", "auto", "Print colorized diffs (valid values are: auto, always or never)")
 	rootCmd.Flags().BoolVarP(&execMode, "exec", "x", false, "Run the command directly, not through the shell")
-	rootCmd.Flags().StringVarP(&opts.Shell, "shell", "s", "sh", "Specify the shell to use")
+	rootCmd.Flags().StringVarP(&opts.Shell, "shell", "s", watcher.DefaultShell, "Specify the shell to use")
 
 	return rootCmd
 }

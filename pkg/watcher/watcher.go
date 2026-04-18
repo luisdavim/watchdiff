@@ -1,12 +1,8 @@
 package watcher
 
 import (
-	"bytes"
 	"context"
-	"errors"
 	"fmt"
-	"os"
-	"os/exec"
 	"strings"
 	"time"
 
@@ -24,6 +20,15 @@ type Options struct {
 	IncludeStderr bool
 	ColorEnabled  bool
 	Shell         string
+}
+
+func shellFlag(shell string) string {
+	switch shell {
+	case "cmd":
+		return "/C"
+	default:
+		return "-c"
+	}
 }
 
 func Run(ctx context.Context, opts *Options, args []string) error {
@@ -46,7 +51,7 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 		opts.Shell = args[0]
 		args = args[1:]
 	} else {
-		args = []string{"-c", strings.Join(args, " ")}
+		args = []string{shellFlag(opts.Shell), strings.Join(args, " ")}
 	}
 
 	lastOutput, lastExit := execute(ctx, opts.Shell, args, opts.IncludeStderr)
@@ -96,28 +101,6 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 			}
 		}
 	}
-}
-
-func execute(ctx context.Context, cmd string, args []string, captureStderr bool) ([]byte, int) {
-	var stdoutBuf bytes.Buffer
-	c := exec.CommandContext(ctx, cmd, args...)
-	// c.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-
-	c.Stdout = &stdoutBuf
-	if captureStderr {
-		c.Stderr = &stdoutBuf
-	} else {
-		c.Stderr = os.Stderr
-	}
-
-	err := c.Run()
-	if err != nil {
-		if e := (&exec.ExitError{}); errors.As(err, &e) {
-			return stdoutBuf.Bytes(), e.ExitCode()
-		}
-		return stdoutBuf.Bytes(), 1
-	}
-	return stdoutBuf.Bytes(), 0
 }
 
 func printColorizedDiff(d, removed, added, header, text, reset string) {
