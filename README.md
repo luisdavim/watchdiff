@@ -1,6 +1,7 @@
 # watchdiff
 
-`watchdiff` is a tool, similar to `waatch` but instead of highligting changes, it prints a diff when ever there is a change in the output of the command being watched.
+`watchdiff` is a tool, similar to `watch` but instead of highligting changes, it prints a diff when ever there is a change in the output of the command being watched.
+By default bothh the `stdout` and `stderr` of the command will be used in the diff.
 
 With `watchdiff`, you get the full initial command output followed by the history of all the changes as a sequence of unified diffs.
 
@@ -24,6 +25,7 @@ Flags:
   -s, --shell string        Specify the shell to use (default "sh")
 ```
 
+To avoid conflicts with flags between `watchdiff` and the command you want to watch, you can quote the command, or just pass `--` as an extra argumennt before the command.
 
 ### Example output
 
