@@ -5,6 +5,17 @@ By default bothh the `stdout` and `stderr` of the command will be used in the di
 
 With `watchdiff`, you get the full initial command output followed by the history of all the changes as a sequence of unified diffs.
 
+## Installation
+
+If you use `hommebrew`:
+
+```sh
+brew tap luisdavim/watchdiff
+brew install watchdiff
+```
+
+If not, download the binaries directly fromm the releases page in this repo.
+
 ## Usage
 
 ```console
