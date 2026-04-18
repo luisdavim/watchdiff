@@ -39,6 +39,7 @@ brews:
     directory: Formula
     description: "Watch a command and generate diffs from the output changes"
     homepage: "https://github.com/luisdavim/watchdiff"
+    license: "MIT"
     download_strategy: CurlDownloadStrategy
     install: |
       bin.install "watchdiff"
