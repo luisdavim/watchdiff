@@ -18,8 +18,8 @@ func execute(ctx context.Context, cmd string, args []string, captureStderr bool)
 	var stdoutBuf bytes.Buffer
 	c := exec.CommandContext(ctx, cmd, args...)
 	c.SysProcAttr = &syscall.SysProcAttr{
-		Setpgid:   true,
-		Pdeathsig: syscall.SIGKILL,
+		Setpgid: true,
+		// Pdeathsig: syscall.SIGKILL,
 	}
 
 	c.Stdout = &stdoutBuf
