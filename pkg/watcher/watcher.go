@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/aymanbagabas/go-udiff"
@@ -102,7 +101,7 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 func execute(ctx context.Context, cmd string, args []string, captureStderr bool) ([]byte, int) {
 	var stdoutBuf bytes.Buffer
 	c := exec.CommandContext(ctx, cmd, args...)
-	c.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	// c.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 
 	c.Stdout = &stdoutBuf
 	if captureStderr {
