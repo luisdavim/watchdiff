@@ -87,7 +87,7 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 				// Generate diff
 				diffText, err := udiff.ToUnified("Old", "New", string(lastOutput), edits, opts.ContextLines)
 				if err != nil {
-					return fmt.Errorf("faild to compute diff: %w", err)
+					return fmt.Errorf("failed to compute diff: %w", err)
 				}
 
 				if diffText != "" {
