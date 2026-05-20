@@ -10,7 +10,7 @@ With `watchdiff`, you get the full initial command output followed by the histor
 If you use `hommebrew`:
 
 ```sh
-brew tap luisdavim/watchdiff
+brew tap luisdavim/watchdiff https://github.com/luisdavim/watchdiff
 brew install watchdiff
 ```
 
