@@ -19,6 +19,7 @@ type Options struct {
 	Quiet         bool
 	IncludeStderr bool
 	ColorEnabled  bool
+	Full          bool
 	Shell         string
 }
 
@@ -82,20 +83,28 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 						clr = clrGreen
 					}
 					fmt.Printf("%sExit Code Changed: %d -> %d%s\n", clr, lastExit, currentExit, clrReset)
+					lastExit = currentExit
 				}
 
-				// Generate diff
-				diffText, err := udiff.ToUnified("Old", "New", string(lastOutput), edits, opts.ContextLines)
-				if err != nil {
-					return fmt.Errorf("failed to compute diff: %w", err)
+				if len(edits) == 0 {
+					continue
 				}
 
-				if diffText != "" {
-					printColorizedDiff(diffText, clrRed, clrGreen, clrCyan, clrGray, clrReset)
+				if opts.Full {
+					fmt.Printf("%s\n", currentOutput)
+				} else {
+					// Generate diff
+					diffText, err := udiff.ToUnified("Old", "New", string(lastOutput), edits, opts.ContextLines)
+					if err != nil {
+						return fmt.Errorf("failed to compute diff: %w", err)
+					}
+
+					if diffText != "" {
+						printColorizedDiff(diffText, clrRed, clrGreen, clrCyan, clrGray, clrReset)
+					}
 				}
 
 				lastOutput = currentOutput
-				lastExit = currentExit
 			} else if !opts.Quiet {
 				fmt.Printf("%s.%s", clrGray, clrReset)
 			}
