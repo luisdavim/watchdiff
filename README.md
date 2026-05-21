@@ -29,6 +29,7 @@ Flags:
   -C, --color string        Print colorized diffs (valid values are: auto, always or never) (default "auto")
   -c, --context int         Number of context lines for diff (default 4)
   -x, --exec                Run the command directly, not through the shell
+  -F, --full                Print full output instead of diffs
   -h, --help                help for watchdiff
   -e, --include-stderr      Include stderr in the diff comparison (default true)
   -n, --interval duration   Interval between updates (e.g. 2s, 500ms) (default 2s)
