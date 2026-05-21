@@ -5,21 +5,21 @@
 class Watchdiff < Formula
   desc "Watch a command and generate diffs from the output changes"
   homepage "https://github.com/luisdavim/watchdiff"
-  version "0.1.0"
+  version "0.2.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/luisdavim/watchdiff/releases/download/0.1.0/watchdiff_darwin_x86_64.tar.gz", using: CurlDownloadStrategy
-      sha256 "df5f17cce8ad76ef0ce8b036bb1d2f8073503927d8482705e96965ec405e6ff6"
+      url "https://github.com/luisdavim/watchdiff/releases/download/v0.2.0/watchdiff_darwin_x86_64.tar.gz", using: CurlDownloadStrategy
+      sha256 "6760359aa9b87ef33f288cfb502fbe7647314f581057c20de04f46bb5d858890"
 
       define_method(:install) do
         bin.install "watchdiff"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/luisdavim/watchdiff/releases/download/0.1.0/watchdiff_darwin_arm64.tar.gz", using: CurlDownloadStrategy
-      sha256 "03d662a0bd1159df4aa271f27e3125db09ef1d659623cb5f882fb375d2aa270d"
+      url "https://github.com/luisdavim/watchdiff/releases/download/v0.2.0/watchdiff_darwin_arm64.tar.gz", using: CurlDownloadStrategy
+      sha256 "d52343f1cc309c3065c0fc13b93813009a09659ad5434343e652089505829f5b"
 
       define_method(:install) do
         bin.install "watchdiff"
@@ -29,15 +29,15 @@ class Watchdiff < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/luisdavim/watchdiff/releases/download/0.1.0/watchdiff_linux_x86_64.tar.gz", using: CurlDownloadStrategy
-      sha256 "70689a2c83c56380aa8ba4c05960ad194931c1abff35fa9ddd216d00c0eb1ce4"
+      url "https://github.com/luisdavim/watchdiff/releases/download/v0.2.0/watchdiff_linux_x86_64.tar.gz", using: CurlDownloadStrategy
+      sha256 "b205520e4b9ef901988e2c309c597ee2f0530540942e04ec1c01290e5e90fc4a"
       define_method(:install) do
         bin.install "watchdiff"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/luisdavim/watchdiff/releases/download/0.1.0/watchdiff_linux_arm64.tar.gz", using: CurlDownloadStrategy
-      sha256 "61df370d67ae9b4f3cee515a55036da89e216dc77c03a1a6141e3c00a222d22b"
+      url "https://github.com/luisdavim/watchdiff/releases/download/v0.2.0/watchdiff_linux_arm64.tar.gz", using: CurlDownloadStrategy
+      sha256 "22a3dcf4a3d6d4e61e197647a304cd65a9767d2d7f56c18f8f0a7432879fa25d"
       define_method(:install) do
         bin.install "watchdiff"
       end
