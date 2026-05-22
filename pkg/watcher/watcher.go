@@ -52,7 +52,13 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 		opts.Shell = args[0]
 		args = args[1:]
 	} else {
-		args = []string{shellFlag(opts.Shell), strings.Join(args, " ")}
+		shellArgs := strings.Fields(opts.Shell)
+		opts.Shell = shellArgs[0]
+		shellArgs = shellArgs[1:]
+		if len(shellArgs) == 0 {
+			shellArgs = []string{shellFlag(opts.Shell)}
+		}
+		args = append(shellArgs, strings.Join(args, " "))
 	}
 
 	lastOutput, lastExit := execute(ctx, opts.Shell, args, opts.IncludeStderr)
