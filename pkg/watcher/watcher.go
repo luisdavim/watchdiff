@@ -49,7 +49,7 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 
 	printHeader := func() {
 		if opts.Static {
-			fmt.Printf(clrScrn)
+			fmt.Print(clrScrn)
 		}
 		fmt.Printf("%sMonitoring:%s %s\n", clrGreen, clrReset, strings.Join(args, " "))
 		fmt.Printf("%sInterval: %s | Context: %d | Stderr: %v%s\n", clrGray, opts.Interval, opts.ContextLines, opts.IncludeStderr, clrReset)
