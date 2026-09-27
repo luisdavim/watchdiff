@@ -11,6 +11,7 @@ import (
 
 const (
 	timeFmt = "15:04:05"
+	clrScrn = "\033[2J\033[H"
 )
 
 type Options struct {
@@ -19,6 +20,7 @@ type Options struct {
 	Quiet         bool
 	IncludeStderr bool
 	ColorEnabled  bool
+	Static        bool
 	Full          bool
 	Shell         string
 }
@@ -43,10 +45,17 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 		clrCyan = "\033[36m"
 		clrReset = "\033[0m"
 	}
+	separator := clrBlue + strings.Repeat("-", 3) + clrReset
 
-	fmt.Printf("%sMonitoring:%s %s\n", clrGreen, clrReset, strings.Join(args, " "))
-	fmt.Printf("%sInterval: %s | Context: %d | Stderr: %v%s\n", clrGray, opts.Interval, opts.ContextLines, opts.IncludeStderr, clrReset)
-	fmt.Println(clrBlue + strings.Repeat("-", 3) + clrReset)
+	printHeader := func() {
+		if opts.Static {
+			fmt.Printf(clrScrn)
+		}
+		fmt.Printf("%sMonitoring:%s %s\n", clrGreen, clrReset, strings.Join(args, " "))
+		fmt.Printf("%sInterval: %s | Context: %d | Stderr: %v%s\n", clrGray, opts.Interval, opts.ContextLines, opts.IncludeStderr, clrReset)
+		fmt.Println(separator)
+	}
+	printHeader()
 
 	if opts.Shell == "" {
 		opts.Shell = args[0]
@@ -63,7 +72,6 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 
 	lastOutput, lastExit := execute(ctx, opts.Shell, args, opts.IncludeStderr)
 	fmt.Printf("%sINITIAL OUTPUT (%s):%s\n%s\n", clrBlue, time.Now().Format(timeFmt), clrReset, string(lastOutput))
-	fmt.Println(clrBlue + strings.Repeat("-", 3) + clrReset)
 
 	ticker := time.NewTicker(opts.Interval)
 	defer ticker.Stop()
@@ -81,7 +89,12 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 
 			edits := udiff.Bytes(lastOutput, currentOutput)
 			if len(edits) > 0 || currentExit != lastExit {
-				fmt.Printf("\n%sCHANGE DETECTED @ %s%s\n", clrYellow, time.Now().Format(timeFmt), clrReset)
+				if opts.Static {
+					printHeader()
+				} else {
+					fmt.Println("")
+				}
+				fmt.Printf("%sCHANGE DETECTED @ %s%s\n", clrYellow, time.Now().Format(timeFmt), clrReset)
 
 				if currentExit != lastExit {
 					clr := clrRed
@@ -111,7 +124,7 @@ func Run(ctx context.Context, opts *Options, args []string) error {
 				}
 
 				lastOutput = currentOutput
-			} else if !opts.Quiet {
+			} else if !opts.Quiet && !opts.Static {
 				fmt.Printf("%s.%s", clrGray, clrReset)
 			}
 		}

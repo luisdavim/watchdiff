@@ -14,23 +14,32 @@ func New() *cobra.Command {
 	var (
 		colorOpt string
 		execMode bool
+		isInTerm bool
 	)
+
+	if info, err := os.Stdout.Stat(); err == nil {
+		if (info.Mode() & os.ModeCharDevice) == os.ModeCharDevice {
+			isInTerm = true
+		}
+	}
 
 	rootCmd := &cobra.Command{
 		Use:   "watchdiff [command]",
 		Short: "Watch a command and print colorized diffs of the output",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if !isInTerm {
+				opts.Static = false
+			}
+
 			switch colorOpt {
 			case "always":
 				opts.ColorEnabled = true
 			case "never":
 				opts.ColorEnabled = false
 			case "auto":
-				if info, err := os.Stdout.Stat(); err == nil {
-					if (info.Mode() & os.ModeCharDevice) == os.ModeCharDevice {
-						opts.ColorEnabled = true
-					}
+				if isInTerm {
+					opts.ColorEnabled = true
 				}
 			default:
 				return fmt.Errorf("invalid value for color flag: %q", colorOpt)
@@ -47,6 +56,7 @@ func New() *cobra.Command {
 	rootCmd.Flags().DurationVarP(&opts.Interval, "interval", "n", 2*time.Second, "Interval between updates (e.g. 2s, 500ms)")
 	rootCmd.Flags().IntVarP(&opts.ContextLines, "context", "c", 4, "Number of context lines for diff")
 	rootCmd.Flags().BoolVarP(&opts.Quiet, "quiet", "q", false, "Suppress heartbeat dots")
+	rootCmd.Flags().BoolVarP(&opts.Static, "static", "S", false, "Static text, print in place")
 	rootCmd.Flags().BoolVarP(&opts.IncludeStderr, "include-stderr", "e", true, "Include stderr in the diff comparison")
 	rootCmd.Flags().BoolVarP(&opts.Full, "full", "F", false, "Print full output instead of diffs")
 	rootCmd.Flags().StringVarP(&colorOpt, "color", "C", "auto", "Print colorized diffs (valid values are: auto, always or never)")
