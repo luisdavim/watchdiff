@@ -35,6 +35,7 @@ Flags:
   -n, --interval duration   Interval between updates (e.g. 2s, 500ms) (default 2s)
   -q, --quiet               Suppress heartbeat dots
   -s, --shell string        Specify the shell to use (default "sh")
+  -S, --static              Static text, print in place
 ```
 
 To avoid conflicts with flags between `watchdiff` and the command you want to watch, you can quote the command, or just pass `--` as an extra argumennt before the command.
