@@ -5,8 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/luisdavim/watchdiff/pkg/watcher"
 	"github.com/spf13/cobra"
+
+	"github.com/luisdavim/watchdiff/pkg/watcher"
 )
 
 func New() *cobra.Command {
